@@ -1,3 +1,11 @@
+## Autor
+
+Ime i prezime: Predrag Davidovic
+Broj indeksa: SI 29/22
+Uloga: Projektovanje arhitekture, implementacija poslovne logike,
+baze podataka, korisnickog interfejsa i testiranje aplikacije.
+
+
 # GameVault
 
 GameVault je web aplikacija za vođenje lične kolekcije video igara, razvijena kao seminarski projekat iz predmeta **Razvoj softvera otvorenog koda**. Namenjena je evidenciji igara, praćenju napretka i čuvanju ličnih ocena i beleški.
