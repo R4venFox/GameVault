@@ -15,5 +15,6 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <ProjectReference Include="..\GameVault.Business\GameVault.Business.csproj" />
+    <ProjectReference Include="..\GameVault.Web\GameVault.Web.csproj" />
   </ItemGroup>
 </Project>

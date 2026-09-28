@@ -2,7 +2,13 @@ using GameVault.Business;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.ModelBindingMessageProvider.SetAttemptedValueIsInvalidAccessor(
+        (value, field) => $"Vrednost za polje {field} nije ispravna.");
+    options.ModelBindingMessageProvider.SetValueMustNotBeNullAccessor(
+        _ => "Unesite vrednost.");
+});
 builder.Services.AddBusiness(builder.Configuration);
 
 var app = builder.Build();
@@ -18,6 +24,8 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseStatusCodePages("text/plain; charset=utf-8", "Zahtev nije moguće obraditi. HTTP status: {0}.");
 app.UseRouting();
 
 app.MapControllerRoute(

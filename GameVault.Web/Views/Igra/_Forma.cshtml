@@ -1,0 +1,73 @@
+@model IgraFormaViewModel
+<div asp-validation-summary="All" class="text-danger" role="alert"></div>
+<div class="row">
+    <div class="col-12 mb-3">
+        <label asp-for="Naziv" class="form-label"></label>
+        <input asp-for="Naziv" class="form-control"   />
+        <span asp-validation-for="Naziv" class="text-danger"></span>
+    </div>
+    <div class="col-12 mb-3">
+        <label asp-for="Opis" class="form-label"></label>
+        <textarea asp-for="Opis" class="form-control" rows="4"></textarea>
+        <span asp-validation-for="Opis" class="text-danger"></span>
+    </div>
+    <div class="col-md-6 mb-3">
+        <label asp-for="GodinaIzdanja" class="form-label"></label>
+        <input asp-for="GodinaIzdanja" class="form-control" type="number" step="1"  />
+        <span asp-validation-for="GodinaIzdanja" class="text-danger"></span>
+    </div>
+    <div class="col-md-6 mb-3">
+        <label asp-for="Developer" class="form-label"></label>
+        <input asp-for="Developer" class="form-control"   />
+        <span asp-validation-for="Developer" class="text-danger"></span>
+    </div>
+    <div class="col-md-6 mb-3">
+        <label asp-for="Izdavac" class="form-label"></label>
+        <input asp-for="Izdavac" class="form-control"   />
+        <span asp-validation-for="Izdavac" class="text-danger"></span>
+    </div>
+    <div class="col-md-6 mb-3">
+        <label asp-for="Ocena" class="form-label"></label>
+        <input asp-for="Ocena" class="form-control" type="number" step="1" min="1" max="10" />
+        <span asp-validation-for="Ocena" class="text-danger"></span>
+    </div>
+    <div class="col-md-6 mb-3">
+        <label asp-for="BrojSati" class="form-label"></label>
+        <input asp-for="BrojSati" class="form-control" type="number" step="1" min="0" />
+        <span asp-validation-for="BrojSati" class="text-danger"></span>
+    </div>
+    <div class="col-md-6 mb-3">
+        <label asp-for="Status" class="form-label"></label>
+        <select asp-for="Status" class="form-select">
+            @foreach (var status in Enum.GetValues<StatusIgre>())
+            {
+                <option value="@((int)status)">@StatusIgrePrikaz.Naziv(status)</option>
+            }
+        </select>
+        <span asp-validation-for="Status" class="text-danger"></span>
+    </div>
+    <div class="col-md-6 mb-3">
+        <label asp-for="ZanrIds" class="form-label"></label>
+        <select asp-for="ZanrIds" asp-items="Model.Zanrovi" class="form-select" multiple size="5" aria-describedby="ZanrIds-pomoc"></select>
+        <div id="ZanrIds-pomoc" class="form-text">Za izbor više stavki držite Ctrl (ili Command na Mac-u).</div>
+        @if (Model.Zanrovi.Count == 0)
+        {
+            <p class="text-muted">Nema dostupnih žanrova.</p>
+        }
+        <span asp-validation-for="ZanrIds" class="text-danger"></span>
+    </div>
+    <div class="col-md-6 mb-3">
+        <label asp-for="PlatformaIds" class="form-label"></label>
+        <select asp-for="PlatformaIds" asp-items="Model.Platforme" class="form-select" multiple size="5" aria-describedby="PlatformaIds-pomoc"></select>
+        <div id="PlatformaIds-pomoc" class="form-text">Za izbor više stavki držite Ctrl (ili Command na Mac-u).</div>
+        @if (Model.Platforme.Count == 0)
+        {
+            <p class="text-muted">Nema dostupnih platformi.</p>
+        }
+        <span asp-validation-for="PlatformaIds" class="text-danger"></span>
+    </div>
+</div>
+<div class="form-check mb-3">
+    <input asp-for="Omiljena" class="form-check-input" />
+    <label asp-for="Omiljena" class="form-check-label"></label>
+</div>

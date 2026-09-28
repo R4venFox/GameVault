@@ -1,0 +1,22 @@
+@model Igra
+@{
+    ViewData["Title"] = Model.Naziv;
+}
+<h1>@Model.Naziv</h1>
+<p class="text-muted">@StatusIgrePrikaz.Naziv(Model.Status) @(Model.Omiljena ? "· Omiljena igra" : "")</p>
+<p class="text-break" style="white-space: pre-wrap">@(Model.Opis ?? "Opis nije unet.")</p>
+<dl class="row">
+    <dt class="col-sm-3">Godina izdanja</dt><dd class="col-sm-9">@(Model.GodinaIzdanja?.ToString() ?? "—")</dd>
+    <dt class="col-sm-3">Razvojni studio</dt><dd class="col-sm-9">@(Model.Developer ?? "—")</dd>
+    <dt class="col-sm-3">Izdavač</dt><dd class="col-sm-9">@(Model.Izdavac ?? "—")</dd>
+    <dt class="col-sm-3">Ocena</dt><dd class="col-sm-9">@(Model.Ocena?.ToString() ?? "Nije ocenjena")</dd>
+    <dt class="col-sm-3">Broj sati</dt><dd class="col-sm-9">@Model.BrojSati</dd>
+    <dt class="col-sm-3">Žanrovi</dt><dd class="col-sm-9">@(Model.Zanrovi.Count == 0 ? "Nisu izabrani" : string.Join(", ", Model.Zanrovi.Select(z => z.Naziv)))</dd>
+    <dt class="col-sm-3">Platforme</dt><dd class="col-sm-9">@(Model.Platforme.Count == 0 ? "Nisu izabrane" : string.Join(", ", Model.Platforme.Select(p => p.Naziv)))</dd>
+    <dt class="col-sm-3">Datum dodavanja (UTC)</dt><dd class="col-sm-9">@Model.DatumDodavanja.ToString("dd.MM.yyyy. HH:mm")</dd>
+</dl>
+<div class="d-flex gap-2">
+    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Izmeni</a>
+    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@Model.Id">Obriši</a>
+    <a class="btn btn-outline-secondary" asp-action="Index">Nazad na kolekciju</a>
+</div>

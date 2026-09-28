@@ -1,0 +1,11 @@
+@model IgraFormaViewModel
+@{
+    ViewData["Title"] = "Izmena igre";
+}
+<h1>Izmena igre</h1>
+<form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+    <input type="hidden" asp-for="Id" />
+    <partial name="_Forma" model="Model" />
+    <button class="btn btn-primary" type="submit">Sačuvaj izmene</button>
+    <a class="btn btn-outline-secondary" asp-action="Index">Odustani</a>
+</form>

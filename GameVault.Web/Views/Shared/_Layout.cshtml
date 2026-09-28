@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="sr-Latn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - GameVault</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/bootstrap.min.css" asp-append-version="true" />
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <header class="border-bottom mb-4">
+        <nav class="navbar navbar-light bg-light">
+            <div class="container">
+                <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">GameVault</a>
+                <a class="nav-link" asp-controller="Igra" asp-action="Index">Moja kolekcija</a>
+            </div>
+        </nav>
+    </header>
+    <main class="container flex-grow-1 pb-4">
+        @RenderBody()
+    </main>
+    <footer class="border-top py-3 text-muted">
+        <div class="container">GameVault — lična kolekcija video igara</div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,36 @@
+@model List<Igra>
+@{
+    ViewData["Title"] = "Moja kolekcija";
+}
+<div class="d-flex flex-wrap gap-3 justify-content-between align-items-center mb-3">
+    <h1>Moja kolekcija</h1>
+    <a class="btn btn-primary" asp-action="Create">Dodaj igru</a>
+</div>
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info">Kolekcija je prazna. Dodajte prvu igru.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead><tr><th>Naziv</th><th>Status</th><th>Ocena</th><th>Sati</th><th>Omiljena</th><th>Akcije</th></tr></thead>
+            <tbody>
+            @foreach (var igra in Model)
+            {
+                <tr>
+                    <td><a asp-action="Details" asp-route-id="@igra.Id">@igra.Naziv</a></td>
+                    <td>@StatusIgrePrikaz.Naziv(igra.Status)</td>
+                    <td>@(igra.Ocena?.ToString() ?? "—")</td>
+                    <td>@igra.BrojSati</td>
+                    <td>@(igra.Omiljena ? "Da" : "Ne")</td>
+                    <td class="text-nowrap">
+                        <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@igra.Id">Izmeni</a>
+                        <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@igra.Id">Obriši</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}

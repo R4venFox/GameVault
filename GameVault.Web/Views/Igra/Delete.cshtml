@@ -1,0 +1,12 @@
+@model Igra
+@{
+    ViewData["Title"] = "Brisanje igre";
+}
+<h1>Brisanje igre</h1>
+<div asp-validation-summary="All" class="text-danger" role="alert"></div>
+<p>Da li želite da obrišete igru <strong>@Model.Naziv</strong> iz kolekcije?</p>
+<p class="text-muted">Ova radnja se ne može poništiti.</p>
+<form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+    <button class="btn btn-danger" type="submit">Obriši igru</button>
+    <a class="btn btn-outline-secondary" asp-action="Details" asp-route-id="@Model.Id">Odustani</a>
+</form>
