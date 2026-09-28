@@ -1,4 +1,5 @@
 using GameVault.Business;
+using GameVault.Business.Services;
 using GameVault.Data;
 using GameVault.Data.Models;
 using GameVault.Data.Repositories;
@@ -11,6 +12,37 @@ namespace GameVault.Tests;
 
 public class DependencyInjectionTests
 {
+    [Fact]
+    public void AddBusiness_RegistrujeScopedServise()
+    {
+        var configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                ["ConnectionStrings:GameVault"] = "Data Source=:memory:"
+            }).Build();
+        var services = new ServiceCollection();
+        services.AddBusiness(configuration);
+        using var provider = services.BuildServiceProvider(new ServiceProviderOptions
+        {
+            ValidateScopes = true,
+            ValidateOnBuild = true
+        });
+        using var scope = provider.CreateScope();
+        using var drugiScope = provider.CreateScope();
+        var igre = scope.ServiceProvider.GetRequiredService<IIgraService>();
+        var zanrovi = scope.ServiceProvider.GetRequiredService<IZanrService>();
+        var platforme = scope.ServiceProvider.GetRequiredService<IPlatformaService>();
+        Assert.IsType<IgraService>(igre);
+        Assert.IsType<ZanrService>(zanrovi);
+        Assert.IsType<PlatformaService>(platforme);
+        Assert.Same(igre, scope.ServiceProvider.GetRequiredService<IIgraService>());
+        Assert.Same(zanrovi, scope.ServiceProvider.GetRequiredService<IZanrService>());
+        Assert.Same(platforme, scope.ServiceProvider.GetRequiredService<IPlatformaService>());
+        Assert.NotSame(igre, drugiScope.ServiceProvider.GetRequiredService<IIgraService>());
+        Assert.NotSame(zanrovi, drugiScope.ServiceProvider.GetRequiredService<IZanrService>());
+        Assert.NotSame(platforme, drugiScope.ServiceProvider.GetRequiredService<IPlatformaService>());
+    }
+
     [Fact]
     public async Task AddBusiness_RegistrujeRepositoryKlaseSaZajednickimScopedContextom()
     {

@@ -1,4 +1,5 @@
 using GameVault.Data;
+using GameVault.Business.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,6 +14,9 @@ public static class DependencyInjection
             ?? throw new InvalidOperationException("Nedostaje konekcioni string GameVault.");
 
         services.AddData(connectionString);
+        services.AddScoped<IIgraService, IgraService>();
+        services.AddScoped<IZanrService, ZanrService>();
+        services.AddScoped<IPlatformaService, PlatformaService>();
 
         return services;
     }
