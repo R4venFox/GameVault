@@ -1,3 +1,4 @@
+using GameVault.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,6 +13,10 @@ public static class DependencyInjection
 
         services.AddDbContext<GameVaultDbContext>(options =>
             options.UseSqlite(connectionString));
+
+        services.AddScoped<IIgraRepository, IgraRepository>();
+        services.AddScoped<IZanrRepository, ZanrRepository>();
+        services.AddScoped<IPlatformaRepository, PlatformaRepository>();
 
         return services;
     }
