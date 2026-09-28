@@ -111,6 +111,7 @@ public class IgraService : IIgraService
 
         igra.Naziv = podaci.Naziv.Trim();
         igra.Opis = podaci.Opis;
+        igra.Beleske = podaci.Beleske;
         igra.GodinaIzdanja = podaci.GodinaIzdanja;
         igra.Developer = podaci.Developer;
         igra.Izdavac = podaci.Izdavac;

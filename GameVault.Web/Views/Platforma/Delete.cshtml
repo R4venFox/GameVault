@@ -1,0 +1,12 @@
+@model NazivViewModel
+@{
+    ViewData["Title"] = "Brisanje";
+}
+<h1>Obriši platformu</h1>
+<div asp-validation-summary="All" class="text-danger" role="alert"></div>
+<p>Da li želite da obrišete zapis <strong>@Model.Naziv</strong>?</p>
+<p class="text-muted">Brisanje je moguće samo ako zapis nije povezan sa igrama.</p>
+<form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+    <button class="btn btn-danger" type="submit">Obriši</button>
+    <a class="btn btn-outline-secondary" asp-action="Index">Odustani</a>
+</form>

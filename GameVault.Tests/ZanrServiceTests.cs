@@ -8,6 +8,42 @@ namespace GameVault.Tests;
 
 public class ZanrServiceTests
 {
+    [Fact]
+    public async Task IzmenaNazivaCuvaIdIOdbijaDuplikate()
+    {
+        var prvi = await service.DodajAsync("Prvi");
+        var drugi = await service.DodajAsync("Drugi");
+        await service.IzmeniAsync(prvi.Id, " PRVI ");
+        Assert.Equal("PRVI", (await service.DohvatiPoIdAsync(prvi.Id))!.Naziv);
+        await Assert.ThrowsAsync<PoslovnaGreskaException>(() => service.IzmeniAsync(prvi.Id, " drugi "));
+        Assert.Equal("PRVI", prvi.Naziv);
+        await service.IzmeniAsync(prvi.Id, "Novi naziv");
+        Assert.Equal("Novi naziv", prvi.Naziv);
+        Assert.Equal("Drugi", drugi.Naziv);
+    }
+
+    [Fact]
+    public async Task PovezanZapisNeMozeDaSeObrise()
+    {
+        var zapis = await service.DodajAsync("Primer");
+        repository.KorisceniId.Add(zapis.Id);
+        await Assert.ThrowsAsync<PoslovnaGreskaException>(() => service.ObrisiAsync(zapis.Id));
+        Assert.Single(repository.Zapisi);
+        repository.KorisceniId.Clear();
+        await service.ObrisiAsync(zapis.Id);
+        Assert.Empty(repository.Zapisi);
+    }
+
+    [Fact]
+    public async Task IzmenaPraznogNazivaINepostojeciZapisiSeOdbijaju()
+    {
+        var zapis = await service.DodajAsync("Primer");
+        await Assert.ThrowsAsync<PoslovnaGreskaException>(() => service.IzmeniAsync(zapis.Id, "   "));
+        await Assert.ThrowsAsync<PoslovnaGreskaException>(() => service.IzmeniAsync(99, "Novi"));
+        await Assert.ThrowsAsync<PoslovnaGreskaException>(() => service.ObrisiAsync(99));
+        Assert.Equal("Primer", zapis.Naziv);
+    }
+
     private readonly ZanrRepositoryFake repository = new();
     private readonly ZanrService service;
 

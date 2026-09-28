@@ -23,7 +23,7 @@ public class IgraServiceTests
 
     private static IgraPodaci ValidniPodaci() => new()
     {
-        Naziv = " Portal ", GodinaIzdanja = 2007, Ocena = 10, BrojSati = 5,
+        Naziv = " Portal ", Beleske = "Probati ponovo", GodinaIzdanja = 2007, Ocena = 10, BrojSati = 5,
         ZanrIds = new List<int> { 1 }, PlatformaIds = new List<int> { 1 }
     };
 
@@ -34,6 +34,7 @@ public class IgraServiceTests
         var igra = await service.DodajAsync(ValidniPodaci());
         Assert.Same(igra, Assert.Single(igre.Zapisi));
         Assert.Equal("Portal", igra.Naziv);
+        Assert.Equal("Probati ponovo", igra.Beleske);
         Assert.Equal(2007, igra.GodinaIzdanja);
         Assert.Equal(10, igra.Ocena);
         Assert.Equal(5, igra.BrojSati);
@@ -107,12 +108,13 @@ public class IgraServiceTests
         var datum = igra.DatumDodavanja;
         var podaci = new IgraPodaci
         {
-            Naziv = " Nova igra ", Opis = "Opis", Developer = "Studio", Izdavac = "Izdavac",
+            Naziv = " Nova igra ", Opis = "Opis", Beleske = "Zavrsiti izazove", Developer = "Studio", Izdavac = "Izdavac",
             Status = StatusIgre.UToku, GodinaIzdanja = 2020, Ocena = 8, BrojSati = 20, Omiljena = true
         };
         await service.IzmeniAsync(igra.Id, podaci);
         Assert.Equal("Nova igra", igra.Naziv);
         Assert.Equal("Opis", igra.Opis);
+        Assert.Equal("Zavrsiti izazove", igra.Beleske);
         Assert.Equal("Studio", igra.Developer);
         Assert.Equal("Izdavac", igra.Izdavac);
         Assert.Equal(datum, igra.DatumDodavanja);

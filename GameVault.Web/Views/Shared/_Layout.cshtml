@@ -11,7 +11,12 @@
         <nav class="navbar navbar-light bg-light">
             <div class="container">
                 <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">GameVault</a>
-                <a class="nav-link" asp-controller="Igra" asp-action="Index">Moja kolekcija</a>
+                <div class="d-flex flex-wrap gap-3">
+                    <a class="nav-link" asp-controller="Home" asp-action="Index">Početna</a>
+                    <a class="nav-link" asp-controller="Igra" asp-action="Index">Igre</a>
+                    <a class="nav-link" asp-controller="Zanr" asp-action="Index">Žanrovi</a>
+                    <a class="nav-link" asp-controller="Platforma" asp-action="Index">Platforme</a>
+                </div>
             </div>
         </nav>
     </header>

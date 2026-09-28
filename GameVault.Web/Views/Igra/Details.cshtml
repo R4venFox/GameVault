@@ -6,6 +6,8 @@
 <p class="text-muted">@StatusIgrePrikaz.Naziv(Model.Status) @(Model.Omiljena ? "· Omiljena igra" : "")</p>
 <p class="text-break" style="white-space: pre-wrap">@(Model.Opis ?? "Opis nije unet.")</p>
 <dl class="row">
+    <dt class="col-sm-3">Lične beleške</dt>
+    <dd class="col-sm-9 text-break" style="white-space: pre-wrap">@(Model.Beleske ?? "Nema beleški.")</dd>
     <dt class="col-sm-3">Godina izdanja</dt><dd class="col-sm-9">@(Model.GodinaIzdanja?.ToString() ?? "—")</dd>
     <dt class="col-sm-3">Razvojni studio</dt><dd class="col-sm-9">@(Model.Developer ?? "—")</dd>
     <dt class="col-sm-3">Izdavač</dt><dd class="col-sm-9">@(Model.Izdavac ?? "—")</dd>

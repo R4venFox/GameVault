@@ -1,0 +1,16 @@
+@model NazivViewModel
+@{
+    ViewData["Title"] = "Izmena";
+}
+<h1>Izmeni žanr</h1>
+<form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="All" class="text-danger" role="alert"></div>
+    <div class="mb-3">
+        <label asp-for="Naziv" class="form-label"></label>
+        <input asp-for="Naziv" class="form-control" />
+        <span asp-validation-for="Naziv" class="text-danger"></span>
+    </div>
+    <button class="btn btn-primary" type="submit">Sačuvaj</button>
+    <a class="btn btn-outline-secondary" asp-action="Index">Odustani</a>
+</form>

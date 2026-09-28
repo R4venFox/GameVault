@@ -27,7 +27,7 @@ public class DatabaseTests : IDisposable
     [Fact]
     public async Task Migracija_KreiraPraznuBazuBezNeprimenjenihPromena()
     {
-        Assert.Single(await context.Database.GetAppliedMigrationsAsync());
+        Assert.Equal(2, (await context.Database.GetAppliedMigrationsAsync()).Count());
         Assert.Empty(await context.Database.GetPendingMigrationsAsync());
         Assert.False(context.Database.HasPendingModelChanges());
         Assert.Empty(await context.Igre.ToListAsync());
@@ -148,8 +148,33 @@ public class DatabaseTests : IDisposable
         await migrator.MigrateAsync(Migration.InitialDatabase);
         Assert.Empty(await context.Database.GetAppliedMigrationsAsync());
         await migrator.MigrateAsync();
-        Assert.Single(await context.Database.GetAppliedMigrationsAsync());
+        Assert.Equal(2, (await context.Database.GetAppliedMigrationsAsync()).Count());
         Assert.Empty(await context.Igre.ToListAsync());
+    }
+
+    [Fact]
+    public async Task MigracijaBeleski_CuvaPostojecePodatke()
+    {
+        var migrator = context.GetService<IMigrator>();
+        await migrator.MigrateAsync("20260928142024_PocetnaBaza");
+        await context.Database.ExecuteSqlRawAsync("""
+            INSERT INTO Igre (Naziv, Opis, Status, BrojSati, Omiljena, DatumDodavanja)
+            VALUES ('Stara igra', 'Opis igre', 0, 0, 0, '2026-01-01 00:00:00');
+            """);
+        await migrator.MigrateAsync();
+        var igra = await context.Igre.SingleAsync();
+        Assert.Equal("Stara igra", igra.Naziv);
+        Assert.Equal("Opis igre", igra.Opis);
+        Assert.Null(igra.Beleske);
+        igra.Beleske = "Licna napomena\nDrugi red";
+        await context.SaveChangesAsync();
+        context.ChangeTracker.Clear();
+        Assert.Equal("Licna napomena\nDrugi red", (await context.Igre.SingleAsync()).Beleske);
+        await migrator.MigrateAsync("20260928142024_PocetnaBaza");
+        context.ChangeTracker.Clear();
+        await migrator.MigrateAsync();
+        Assert.Null((await context.Igre.SingleAsync()).Beleske);
+        Assert.Equal("Opis igre", (await context.Igre.SingleAsync()).Opis);
     }
 
     private async Task OcekivanoOgranicenje()

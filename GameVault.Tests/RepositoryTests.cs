@@ -30,7 +30,7 @@ public class RepositoryTests : IDisposable
     [Fact]
     public async Task Igra_DodavanjeIDohvatanje()
     {
-        var igra = new Igra { Naziv = "Portal", Opis = "Logicka igra", GodinaIzdanja = 2007 };
+        var igra = new Igra { Naziv = "Portal", Opis = "Logicka igra", Beleske = "Moja napomena", GodinaIzdanja = 2007 };
         await igre.DodajAsync(igra);
         context.ChangeTracker.Clear();
 
@@ -39,6 +39,7 @@ public class RepositoryTests : IDisposable
         Assert.True(igra.Id > 0);
         Assert.Equal(igra.Naziv, sacuvana.Naziv);
         Assert.Equal(igra.Opis, sacuvana.Opis);
+        Assert.Equal(igra.Beleske, sacuvana.Beleske);
         Assert.Equal(igra.GodinaIzdanja, sacuvana.GodinaIzdanja);
         Assert.True(await igre.PostojiAsync(igra.Id));
         Assert.Single(await igre.DohvatiSveAsync());
@@ -53,6 +54,7 @@ public class RepositoryTests : IDisposable
         var izmena = (await igre.DohvatiPoIdAsync(igra.Id))!;
         izmena.Naziv = "Portal 2";
         izmena.Opis = "Novi opis";
+        izmena.Beleske = "Nova napomena";
         izmena.GodinaIzdanja = 2011;
         izmena.Developer = "Valve";
         izmena.Izdavac = "Valve";
@@ -67,6 +69,7 @@ public class RepositoryTests : IDisposable
         var sacuvana = (await igre.DohvatiPoIdAsync(igra.Id))!;
         Assert.Equal(izmena.Naziv, sacuvana.Naziv);
         Assert.Equal(izmena.Opis, sacuvana.Opis);
+        Assert.Equal(izmena.Beleske, sacuvana.Beleske);
         Assert.Equal(izmena.GodinaIzdanja, sacuvana.GodinaIzdanja);
         Assert.Equal(izmena.Developer, sacuvana.Developer);
         Assert.Equal(izmena.Izdavac, sacuvana.Izdavac);
@@ -218,6 +221,54 @@ public class RepositoryTests : IDisposable
             Assert.Equal("Portal", (await igre.DohvatiPoIdAsync(igra.Id))!.Naziv);
         else
             Assert.Empty(await igre.DohvatiSveAsync());
+    }
+
+    [Fact]
+    public async Task Sifarnici_IzmenaIBezbednoBrisanje()
+    {
+        var igra = await DodajIgruSaVezama();
+        var zanrId = Assert.Single(igra.Zanrovi).Id;
+        var platformaId = Assert.Single(igra.Platforme).Id;
+        Assert.True(await zanrovi.IzmeniAsync(zanrId, "Novi zanr"));
+        Assert.True(await platforme.IzmeniAsync(platformaId, "Nova platforma"));
+        context.ChangeTracker.Clear();
+        var sacuvana = (await igre.DohvatiPoIdAsync(igra.Id))!;
+        Assert.Equal("Novi zanr", Assert.Single(sacuvana.Zanrovi).Naziv);
+        Assert.Equal("Nova platforma", Assert.Single(sacuvana.Platforme).Naziv);
+        Assert.True(await zanrovi.KoristiSeAsync(zanrId));
+        Assert.True(await platforme.KoristiSeAsync(platformaId));
+        Assert.False(await zanrovi.ObrisiAsync(zanrId));
+        Assert.False(await platforme.ObrisiAsync(platformaId));
+        sacuvana = (await igre.DohvatiPoIdAsync(igra.Id))!;
+        Assert.Single(sacuvana.Zanrovi);
+        Assert.Single(sacuvana.Platforme);
+
+        await igre.ObrisiAsync(igra.Id);
+        Assert.False(await zanrovi.KoristiSeAsync(zanrId));
+        Assert.False(await platforme.KoristiSeAsync(platformaId));
+        Assert.True(await zanrovi.ObrisiAsync(zanrId));
+        Assert.True(await platforme.ObrisiAsync(platformaId));
+        Assert.Null(await zanrovi.DohvatiPoIdAsync(zanrId));
+        Assert.Null(await platforme.DohvatiPoIdAsync(platformaId));
+        Assert.False(await zanrovi.ObrisiAsync(zanrId));
+        Assert.False(await platforme.ObrisiAsync(platformaId));
+        Assert.False(await zanrovi.IzmeniAsync(zanrId, "Ne postoji"));
+        Assert.False(await platforme.IzmeniAsync(platformaId, "Ne postoji"));
+    }
+
+    [Fact]
+    public async Task BeleskeMoguDaSeUklone()
+    {
+        var igra = new Igra { Naziv = "Primer", Opis = "Opis", Beleske = "Beleske" };
+        await igre.DodajAsync(igra);
+        context.ChangeTracker.Clear();
+        var izmena = (await igre.DohvatiPoIdAsync(igra.Id))!;
+        izmena.Beleske = null;
+        await igre.IzmeniAsync(izmena);
+        context.ChangeTracker.Clear();
+        var sacuvana = (await igre.DohvatiPoIdAsync(igra.Id))!;
+        Assert.Null(sacuvana.Beleske);
+        Assert.Equal("Opis", sacuvana.Opis);
     }
 
     private async Task<Igra> DodajIgruSaVezama()

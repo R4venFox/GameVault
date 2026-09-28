@@ -5,6 +5,33 @@ namespace GameVault.Business.Services;
 
 public class ZanrService : IZanrService
 {
+    public Task<Zanr?> DohvatiPoIdAsync(int id, CancellationToken cancellationToken = default)
+        => repository.DohvatiPoIdAsync(id, cancellationToken);
+
+    public async Task IzmeniAsync(int id, string naziv, CancellationToken cancellationToken = default)
+    {
+        if (await repository.DohvatiPoIdAsync(id, cancellationToken) is null)
+            throw new PoslovnaGreskaException("Zapis ne postoji.");
+        if (string.IsNullOrWhiteSpace(naziv))
+            throw new PoslovnaGreskaException("Naziv je obavezan.");
+        naziv = naziv.Trim();
+        var zapisi = await repository.DohvatiSveAsync(cancellationToken);
+        if (zapisi.Any(z => z.Id != id && string.Equals(z.Naziv.Trim(), naziv, StringComparison.OrdinalIgnoreCase)))
+            throw new PoslovnaGreskaException("Zapis sa ovim nazivom vec postoji.");
+        if (!await repository.IzmeniAsync(id, naziv, cancellationToken))
+            throw new PoslovnaGreskaException("Zapis ne postoji.");
+    }
+
+    public async Task ObrisiAsync(int id, CancellationToken cancellationToken = default)
+    {
+        if (await repository.DohvatiPoIdAsync(id, cancellationToken) is null)
+            throw new PoslovnaGreskaException("Zapis ne postoji.");
+        if (await repository.KoristiSeAsync(id, cancellationToken))
+            throw new PoslovnaGreskaException("Brisanje nije dozvoljeno jer je zapis povezan sa igrama.");
+        if (!await repository.ObrisiAsync(id, cancellationToken))
+            throw new PoslovnaGreskaException("Zapis nije obrisan jer vise ne postoji ili je povezan sa igrama.");
+    }
+
     private readonly IZanrRepository repository;
 
     public ZanrService(IZanrRepository repository)

@@ -18,6 +18,9 @@ public class IgraFormaViewModel
     [Display(Name = "Opis")]
     public string? Opis { get; set; }
 
+    [Display(Name = "Lične beleške")]
+    public string? Beleske { get; set; }
+
     [Display(Name = "Godina izdanja")]
     public int? GodinaIzdanja { get; set; }
 
@@ -56,7 +59,7 @@ public class IgraFormaViewModel
 
     public IgraPodaci UPoslovnePodatke() => new()
     {
-        Naziv = Naziv, Opis = Opis, GodinaIzdanja = GodinaIzdanja,
+        Naziv = Naziv, Opis = Opis, Beleske = Beleske, GodinaIzdanja = GodinaIzdanja,
         Developer = Developer, Izdavac = Izdavac, Status = Status,
         Ocena = Ocena, BrojSati = BrojSati, Omiljena = Omiljena,
         ZanrIds = ZanrIds, PlatformaIds = PlatformaIds
@@ -64,7 +67,7 @@ public class IgraFormaViewModel
 
     public static IgraFormaViewModel IzIgre(Igra igra) => new()
     {
-        Id = igra.Id, Naziv = igra.Naziv, Opis = igra.Opis,
+        Id = igra.Id, Naziv = igra.Naziv, Opis = igra.Opis, Beleske = igra.Beleske,
         GodinaIzdanja = igra.GodinaIzdanja, Developer = igra.Developer,
         Izdavac = igra.Izdavac, Status = igra.Status, Ocena = igra.Ocena,
         BrojSati = igra.BrojSati, Omiljena = igra.Omiljena,

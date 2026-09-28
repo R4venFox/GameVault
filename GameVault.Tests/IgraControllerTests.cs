@@ -61,7 +61,7 @@ public class IgraControllerTests
     {
         var model = new IgraFormaViewModel
         {
-            Naziv = "Portal 2", Opis = "Opis", GodinaIzdanja = 2011,
+            Naziv = "Portal 2", Opis = "Opis", Beleske = "Moje beleske", GodinaIzdanja = 2011,
             Developer = "Valve", Izdavac = "Valve", Status = StatusIgre.UToku,
             Ocena = 9, BrojSati = 12, Omiljena = true,
             ZanrIds = new() { 1 }, PlatformaIds = new() { 1 }
@@ -72,6 +72,7 @@ public class IgraControllerTests
         var podaci = service.SacuvaniPodaci!;
         Assert.Equal(model.Naziv, podaci.Naziv);
         Assert.Equal(model.Opis, podaci.Opis);
+        Assert.Equal(model.Beleske, podaci.Beleske);
         Assert.Equal(model.GodinaIzdanja, podaci.GodinaIzdanja);
         Assert.Equal(model.Developer, podaci.Developer);
         Assert.Equal(model.Izdavac, podaci.Izdavac);

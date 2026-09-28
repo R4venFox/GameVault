@@ -21,4 +21,5 @@ podesiti poverenje u razvojni sertifikat komandom `dotnet dev-certs https --trus
 
 Migracije se ne primenjuju automatski pri pokretanju. Baza se ne brise i nema
 automatskog dodavanja podataka. Izbori zanrova i platformi prikazuju zapise koji
-vec postoje u bazi; njihovo upravljanje nije deo trenutnog interfejsa.
+vec postoje u bazi. Zanrovima i platformama upravlja se preko linkova u navigaciji.
+Zapisi povezani sa igrama ne mogu se obrisati dok se njihove veze ne uklone iz igara.

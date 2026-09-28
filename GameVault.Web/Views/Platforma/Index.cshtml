@@ -1,0 +1,32 @@
+@model List<Platforma>
+@{
+    ViewData["Title"] = "Platforme";
+}
+<div class="d-flex flex-wrap gap-3 justify-content-between align-items-center mb-3">
+    <h1>Platforme</h1>
+    <a class="btn btn-primary" asp-action="Create">Dodaj platformu</a>
+</div>
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info">Nema unetih zapisa.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead><tr><th>Naziv</th><th>Akcije</th></tr></thead>
+            <tbody>
+            @foreach (var zapis in Model)
+            {
+                <tr>
+                    <td>@zapis.Naziv</td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@zapis.Id">Izmeni</a>
+                        <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@zapis.Id">Obriši</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}

@@ -2,6 +2,7 @@ using System;
 using GameVault.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameVault.Data.Migrations
 {
     [DbContext(typeof(GameVaultDbContext))]
-    partial class GameVaultDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260928145908_DodateBeleske")]
+    partial class DodateBeleske
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.20");

@@ -6,6 +6,7 @@ public class IgraPodaci
 {
     public string Naziv { get; set; } = string.Empty;
     public string? Opis { get; set; }
+    public string? Beleske { get; set; }
     public int? GodinaIzdanja { get; set; }
     public string? Developer { get; set; }
     public string? Izdavac { get; set; }
