@@ -22,7 +22,7 @@ Pregled obuhvata sve direktne `PackageReference` zavisnosti iz četiri projekta,
 | dotnet-ef | 8.0.20 | Lokalni CLI alat za EF Core migracije | MIT | [Paket](https://www.nuget.org/packages/dotnet-ef/8.0.20), [EF Core licenca](https://github.com/dotnet/efcore/blob/a947fe22902f3f0b921f5dafed9f059eaa4d18c6/LICENSE.txt) |
 | Bootstrap | 5.3.3 | CSS za izgled Razor prikaza, u `GameVault.Web/wwwroot/lib/bootstrap` | MIT | [Zvanična licenca za v5.3.3](https://github.com/twbs/bootstrap/blob/v5.3.3/LICENSE), [lokalna licenca](GameVault.Web/wwwroot/lib/bootstrap/LICENSE) |
 
-Verzija Bootstrapa potvrđena je u zaglavlju `bootstrap.min.css`. Lokalan licencni fajl je imao stariju godinu; obaveštenje za Bootstrap autore usklađeno je sa verzijom 5.3.3. Postojeća atribucija kompaniji Twitter je zadržana. CSS nije menjan.
+Verzija Bootstrapa potvrđena je u zaglavlju `bootstrap.min.css`. Lokalni licencni fajl je identičan originalnom, neizmenjenom LICENSE fajlu iz zvaničnog repozitorijuma za verziju 5.3.3. CSS nije menjan.
 
 ## Framework i posredne zavisnosti
 
