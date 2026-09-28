@@ -10,6 +10,18 @@ namespace GameVault.Tests;
 
 public class IgraControllerTests
 {
+    [Fact]
+    public async Task Index_NevalidniKriterijumiPrikazujuGreskuIIzbore()
+    {
+        controller.ModelState.AddModelError("Pretraga.Sortiranje", "Uneta vrednost nije ispravna.");
+        var model = new IgraListaViewModel();
+        var result = Assert.IsType<ViewResult>(await controller.Index(model, default));
+        Assert.Same(model, result.Model);
+        Assert.Null(service.PoslednjaPretraga);
+        Assert.Single(model.Zanrovi);
+        Assert.Single(model.Platforme);
+    }
+
     private readonly IgraServiceFake service = new();
     private readonly IgraController controller;
 
@@ -25,8 +37,13 @@ public class IgraControllerTests
     [Fact]
     public async Task Index_VracaListuIgara()
     {
-        var result = Assert.IsType<ViewResult>(await controller.Index(default));
-        Assert.Same(service.Igra, Assert.Single(Assert.IsType<List<Igra>>(result.Model)));
+        var model = new IgraListaViewModel();
+        model.Pretraga.Tekst = "Portal";
+        var result = Assert.IsType<ViewResult>(await controller.Index(model, default));
+        Assert.Same(service.Igra, Assert.Single(Assert.IsType<IgraListaViewModel>(result.Model).Igre));
+        Assert.Same(model.Pretraga, service.PoslednjaPretraga);
+        Assert.Single(model.Zanrovi);
+        Assert.Single(model.Platforme);
     }
 
     [Fact]

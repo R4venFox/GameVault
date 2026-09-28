@@ -1,4 +1,5 @@
-@model List<Igra>
+@model IgraListaViewModel
+@using GameVault.Business.Models
 @{
     ViewData["Title"] = "Moja kolekcija";
 }
@@ -6,9 +7,68 @@
     <h1>Moja kolekcija</h1>
     <a class="btn btn-primary" asp-action="Create">Dodaj igru</a>
 </div>
-@if (Model.Count == 0)
+<form asp-action="Index" method="get" class="card card-body mb-4">
+    <div asp-validation-summary="All" class="text-danger" role="alert"></div>
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label asp-for="Pretraga.Tekst" class="form-label">Pretraga</label>
+            <input asp-for="Pretraga.Tekst" class="form-control" placeholder="Naziv, razvojni studio ili izdavač" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="Pretraga.Status" class="form-label">Status</label>
+            <select asp-for="Pretraga.Status" class="form-select">
+                <option value="">Svi statusi</option>
+                @foreach (var status in Enum.GetValues<StatusIgre>())
+                {
+                    <option value="@((int)status)">@StatusIgrePrikaz.Naziv(status)</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label asp-for="Pretraga.ZanrId" class="form-label">Žanr</label>
+            <select asp-for="Pretraga.ZanrId" asp-items="Model.Zanrovi" class="form-select">
+                <option value="">Svi žanrovi</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label asp-for="Pretraga.PlatformaId" class="form-label">Platforma</label>
+            <select asp-for="Pretraga.PlatformaId" asp-items="Model.Platforme" class="form-select">
+                <option value="">Sve platforme</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label asp-for="Pretraga.Sortiranje" class="form-label">Sortiraj po</label>
+            <select asp-for="Pretraga.Sortiranje" class="form-select">
+                <option value="Naziv">Nazivu</option>
+                <option value="GodinaIzdanja">Godini izdanja</option>
+                <option value="Ocena">Oceni</option>
+                <option value="BrojSati">Broju sati</option>
+                <option value="DatumDodavanja">Datumu dodavanja</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label asp-for="Pretraga.Opadajuce" class="form-label">Redosled</label>
+            <select asp-for="Pretraga.Opadajuce" class="form-select">
+                <option value="false">Rastući</option>
+                <option value="true">Opadajući</option>
+            </select>
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+            <div class="form-check mb-2">
+                <input asp-for="Pretraga.SamoOmiljene" class="form-check-input" />
+                <label asp-for="Pretraga.SamoOmiljene" class="form-check-label">Samo omiljene</label>
+            </div>
+        </div>
+    </div>
+    <div class="mt-3">
+        <button type="submit" class="btn btn-primary">Primeni</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Poništi</a>
+    </div>
+</form>
+<p class="text-muted">Broj rezultata: @Model.Igre.Count</p>
+@if (Model.Igre.Count == 0)
 {
-    <div class="alert alert-info">Kolekcija je prazna. Dodajte prvu igru.</div>
+    <div class="alert alert-info">Nema igara za prikaz. Dodajte igru ili promenite kriterijume.</div>
 }
 else
 {
@@ -16,7 +76,7 @@ else
         <table class="table table-striped align-middle">
             <thead><tr><th>Naziv</th><th>Status</th><th>Ocena</th><th>Sati</th><th>Omiljena</th><th>Akcije</th></tr></thead>
             <tbody>
-            @foreach (var igra in Model)
+            @foreach (var igra in Model.Igre)
             {
                 <tr>
                     <td><a asp-action="Details" asp-route-id="@igra.Id">@igra.Naziv</a></td>

@@ -6,6 +6,47 @@ namespace GameVault.Business.Services;
 
 public class IgraService : IIgraService
 {
+    public async Task<List<Igra>> PretraziAsync(IgraPretraga pretraga, CancellationToken cancellationToken = default)
+    {
+        if (!Enum.IsDefined(pretraga.Sortiranje) ||
+            (pretraga.Status.HasValue && !Enum.IsDefined(pretraga.Status.Value)))
+            throw new PoslovnaGreskaException("Izabrani status ili sortiranje nije ispravno.");
+
+        IEnumerable<Igra> rezultat = await igre.DohvatiSveAsync(true, cancellationToken);
+        var tekst = pretraga.Tekst?.Trim();
+        if (!string.IsNullOrEmpty(tekst))
+            rezultat = rezultat.Where(i => i.Naziv.Contains(tekst, StringComparison.OrdinalIgnoreCase)
+                || (i.Developer?.Contains(tekst, StringComparison.OrdinalIgnoreCase) ?? false)
+                || (i.Izdavac?.Contains(tekst, StringComparison.OrdinalIgnoreCase) ?? false));
+        if (pretraga.Status.HasValue)
+            rezultat = rezultat.Where(i => i.Status == pretraga.Status);
+        if (pretraga.ZanrId.HasValue)
+            rezultat = rezultat.Where(i => i.Zanrovi.Any(z => z.Id == pretraga.ZanrId));
+        if (pretraga.PlatformaId.HasValue)
+            rezultat = rezultat.Where(i => i.Platforme.Any(p => p.Id == pretraga.PlatformaId));
+        if (pretraga.SamoOmiljene)
+            rezultat = rezultat.Where(i => i.Omiljena);
+
+        // nepoznata godina i nepostavljena ocena ostaju na kraju u oba smera
+        IOrderedEnumerable<Igra> sortirano = pretraga.Sortiranje switch
+        {
+            SortiranjeIgara.GodinaIzdanja => pretraga.Opadajuce
+                ? rezultat.OrderBy(i => i.GodinaIzdanja is null).ThenByDescending(i => i.GodinaIzdanja)
+                : rezultat.OrderBy(i => i.GodinaIzdanja is null).ThenBy(i => i.GodinaIzdanja),
+            SortiranjeIgara.Ocena => pretraga.Opadajuce
+                ? rezultat.OrderBy(i => i.Ocena is null).ThenByDescending(i => i.Ocena)
+                : rezultat.OrderBy(i => i.Ocena is null).ThenBy(i => i.Ocena),
+            SortiranjeIgara.BrojSati => pretraga.Opadajuce
+                ? rezultat.OrderByDescending(i => i.BrojSati) : rezultat.OrderBy(i => i.BrojSati),
+            SortiranjeIgara.DatumDodavanja => pretraga.Opadajuce
+                ? rezultat.OrderByDescending(i => i.DatumDodavanja) : rezultat.OrderBy(i => i.DatumDodavanja),
+            _ => pretraga.Opadajuce
+                ? rezultat.OrderByDescending(i => i.Naziv, StringComparer.OrdinalIgnoreCase)
+                : rezultat.OrderBy(i => i.Naziv, StringComparer.OrdinalIgnoreCase)
+        };
+        return sortirano.ThenBy(i => i.Id).ToList();
+    }
+
     private readonly IIgraRepository igre;
     private readonly IZanrRepository zanrovi;
     private readonly IPlatformaRepository platforme;

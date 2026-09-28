@@ -1,0 +1,24 @@
+@model StatistikaViewModel
+@{
+    ViewData["Title"] = "Statistika";
+}
+<h1>Statistika kolekcije</h1>
+<p class="text-muted">Pregled cele kolekcije, nezavisno od filtera na stranici Igre.</p>
+@if (Model.UkupnoIgara == 0)
+{
+    <div class="alert alert-info">Kolekcija je prazna. Dodajte igre da biste pratili svoj napredak.</div>
+}
+<dl class="row">
+    <dt class="col-sm-5">Ukupan broj igara</dt><dd class="col-sm-7" id="UkupnoIgara">@Model.UkupnoIgara</dd>
+    <dt class="col-sm-5">Planirane</dt><dd class="col-sm-7" id="Planirane">@Model.Planirane</dd>
+    <dt class="col-sm-5">U toku</dt><dd class="col-sm-7" id="UToku">@Model.UToku</dd>
+    <dt class="col-sm-5">Završene</dt><dd class="col-sm-7" id="Zavrsene">@Model.Zavrsene</dd>
+    <dt class="col-sm-5">Napuštene</dt><dd class="col-sm-7" id="Napustene">@Model.Napustene</dd>
+    <dt class="col-sm-5">Omiljene</dt><dd class="col-sm-7" id="Omiljene">@Model.Omiljene</dd>
+    <dt class="col-sm-5">Ukupan broj sati</dt><dd class="col-sm-7" id="UkupnoSati">@Model.UkupnoSati</dd>
+    <dt class="col-sm-5">Prosečna ocena</dt><dd class="col-sm-7" id="ProsecnaOcena">@(Model.ProsecnaOcena?.ToString("0.00", System.Globalization.CultureInfo.GetCultureInfo("sr-Latn-RS")) ?? "Nema ocenjenih igara")</dd>
+    <dt class="col-sm-5">Žanr u najviše igara</dt><dd class="col-sm-7" id="NajcesciZanr">@(Model.NajcesciZanr ?? "Nema podataka")</dd>
+    <dt class="col-sm-5">Platforma u najviše igara</dt><dd class="col-sm-7" id="NajcescaPlatforma">@(Model.NajcescaPlatforma ?? "Nema podataka")</dd>
+</dl>
+<p class="text-muted">Žanr i platforma biraju se prema broju igara. Pri jednakom broju koristi se naziv po abecedi.</p>
+<a asp-controller="Igra" asp-action="Index" class="btn btn-outline-secondary">Nazad na igre</a>

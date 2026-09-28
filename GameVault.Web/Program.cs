@@ -8,6 +8,8 @@ builder.Services.AddControllersWithViews(options =>
         (value, field) => $"Vrednost za polje {field} nije ispravna.");
     options.ModelBindingMessageProvider.SetValueMustNotBeNullAccessor(
         _ => "Unesite vrednost.");
+    options.ModelBindingMessageProvider.SetValueIsInvalidAccessor(
+        _ => "Uneta vrednost nije ispravna.");
 });
 builder.Services.AddBusiness(builder.Configuration);
 

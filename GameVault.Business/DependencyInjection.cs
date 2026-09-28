@@ -15,6 +15,7 @@ public static class DependencyInjection
 
         services.AddData(connectionString);
         services.AddScoped<IIgraService, IgraService>();
+        services.AddScoped<IStatistikaService, StatistikaService>();
         services.AddScoped<IZanrService, ZanrService>();
         services.AddScoped<IPlatformaService, PlatformaService>();
 

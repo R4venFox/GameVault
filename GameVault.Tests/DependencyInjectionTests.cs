@@ -30,6 +30,10 @@ public class DependencyInjectionTests
         using var scope = provider.CreateScope();
         using var drugiScope = provider.CreateScope();
         var igre = scope.ServiceProvider.GetRequiredService<IIgraService>();
+        var statistika = scope.ServiceProvider.GetRequiredService<IStatistikaService>();
+        Assert.IsType<StatistikaService>(statistika);
+        Assert.Same(statistika, scope.ServiceProvider.GetRequiredService<IStatistikaService>());
+        Assert.NotSame(statistika, drugiScope.ServiceProvider.GetRequiredService<IStatistikaService>());
         var zanrovi = scope.ServiceProvider.GetRequiredService<IZanrService>();
         var platforme = scope.ServiceProvider.GetRequiredService<IPlatformaService>();
         Assert.IsType<IgraService>(igre);

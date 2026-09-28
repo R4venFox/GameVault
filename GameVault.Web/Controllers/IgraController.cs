@@ -19,8 +19,25 @@ public class IgraController : Controller
         this.platforme = platforme;
     }
 
-    public async Task<IActionResult> Index(CancellationToken cancellationToken)
-        => View(await igre.DohvatiSveAsync(cancellationToken));
+    public async Task<IActionResult> Index(IgraListaViewModel model, CancellationToken cancellationToken)
+    {
+        if (ModelState.IsValid)
+        {
+            try
+            {
+                model.Igre = await igre.PretraziAsync(model.Pretraga, cancellationToken);
+            }
+            catch (PoslovnaGreskaException exception)
+            {
+                ModelState.AddModelError(string.Empty, exception.Message);
+            }
+        }
+        model.Zanrovi = (await zanrovi.DohvatiSveAsync(cancellationToken))
+            .Select(z => new SelectListItem(z.Naziv, z.Id.ToString())).ToList();
+        model.Platforme = (await platforme.DohvatiSveAsync(cancellationToken))
+            .Select(p => new SelectListItem(p.Naziv, p.Id.ToString())).ToList();
+        return View(model);
+    }
 
     public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)
     {

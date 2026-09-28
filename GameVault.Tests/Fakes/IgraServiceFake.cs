@@ -7,6 +7,13 @@ namespace GameVault.Tests.Fakes;
 
 internal class IgraServiceFake : IIgraService
 {
+    public IgraPretraga? PoslednjaPretraga { get; private set; }
+    public Task<List<Igra>> PretraziAsync(IgraPretraga pretraga, CancellationToken cancellationToken = default)
+    {
+        ProveriGresku();
+        PoslednjaPretraga = pretraga;
+        return DohvatiSveAsync(cancellationToken);
+    }
     public Igra? Igra { get; set; } = new() { Id = 1, Naziv = "Portal" };
     public string? Greska { get; set; }
     public IgraPodaci? SacuvaniPodaci { get; private set; }
